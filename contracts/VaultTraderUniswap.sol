@@ -2,37 +2,9 @@
 pragma solidity ^0.8.28;
 
 import "./VaultTraderBase.sol";
+import "./interfaces/IUniswapV2Router.sol";
+import "./interfaces/IUniswapV3Router.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-
-/**
- * @dev Minimal interface for Uniswap V2 Router.
- */
-interface IUniswapV2Router {
-    function swapExactTokensForTokens(
-        uint256 amountIn,
-        uint256 amountOutMin,
-        address[] calldata path,
-        address to,
-        uint256 deadline
-    ) external returns (uint256[] memory amounts);
-}
-
-/**
- * @dev Minimal interface for Uniswap V3 Router.
- */
-interface IUniswapV3SwapRouter {
-    struct ExactInputSingleParams {
-        address tokenIn;
-        address tokenOut;
-        uint24 fee;
-        address recipient;
-        uint256 amountIn;
-        uint256 amountOutMinimum;
-        uint160 sqrtPriceLimitX96;
-    }
-
-    function exactInputSingle(ExactInputSingleParams calldata params) external payable returns (uint256 amountOut);
-}
 
 /**
  * @title VaultTraderUniswap

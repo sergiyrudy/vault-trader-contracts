@@ -39,11 +39,11 @@ describe("VaultTraderUniswap", function () {
         const vaultTrader = (await upgrades.deployProxy(
             VaultTraderUniswapFactory,
             [
-                owner.address,                 // _owner
-                swapper.address,               // _swapper
-                await weth.getAddress(),       // _weth
-                await uniswapV2Router.getAddress(), // Uniswap V2 router
-                await uniswapV3Router.getAddress()  // Uniswap V3 router
+                owner.address,
+                swapper.address,
+                await weth.getAddress(),
+                await uniswapV2Router.getAddress(),
+                await uniswapV3Router.getAddress()
             ],
             { initializer: "initialize" }
         )) as VaultTraderUniswap;

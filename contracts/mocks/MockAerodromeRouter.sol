@@ -1,32 +1,28 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
-contract MockAerodromeRouter {
-    event SwapCalled(
-        address caller,
-        uint256 amountIn,
-        uint256 amountOutMin,
-        address tokenIn,
-        address tokenOut,
-        bool stable
-    );
+import "../interfaces/IAerodromeRouter.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-    function swapExactTokensForTokensSimple(
+contract MockAerodromeRouter is IAerodromeRouter {
+    function swapExactTokensForTokens(
         uint256 amountIn,
         uint256 amountOutMin,
-        address tokenIn,
-        address tokenOut,
-        bool stable,
+        Route[] calldata routes,
         address to,
-        uint256 // deadline
-    ) external returns (uint256[] memory amounts) {
-        // emit an event and return a dummy amounts array for testing purposes
-        emit SwapCalled(msg.sender, amountIn, amountOutMin, tokenIn, tokenOut, stable);
+        uint256 deadline
+    ) external override returns (uint256[] memory amounts) {
+        require(routes.length > 0, "MockAerodromeRouter: invalid route");
+
+        address tokenIn = routes[0].from;
+        address tokenOut = routes[0].to;
+
+        IERC20(tokenIn).transferFrom(msg.sender, address(this), amountIn);
 
         amounts = new uint256[](2);
         amounts[0] = amountIn;
-        // like we got some bigger or smaller last value
-        amounts[1] = amountOutMin + 100;
-        return amounts;
+        amounts[1] = amountIn * 2;
+
+        IERC20(tokenOut).transfer(to, amounts[1]);
     }
 }

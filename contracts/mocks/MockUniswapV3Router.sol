@@ -1,27 +1,33 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
-contract MockUniswapV3SwapRouter {
-    event ExactInputSingleCalled(address caller, uint256 amountIn, uint256 amountOutMinimum);
+import "../interfaces/IUniswapV3Router.sol";
 
-    struct ExactInputSingleParams {
-        address tokenIn;
-        address tokenOut;
-        uint24 fee;
-        address recipient;
-        uint256 deadline;
-        uint256 amountIn;
-        uint256 amountOutMinimum;
-        uint160 sqrtPriceLimitX96;
-    }
+contract MockUniswapV3SwapRouter is IUniswapV3SwapRouter {
+    event ExactInputSingleCalled(
+        address indexed caller,
+        address tokenIn,
+        address tokenOut,
+        uint256 amountIn,
+        uint256 amountOutMinimum,
+        uint256 amountOut
+    );
 
     function exactInputSingle(ExactInputSingleParams calldata params)
     external
     payable
+    override
     returns (uint256 amountOut)
     {
-        emit ExactInputSingleCalled(msg.sender, params.amountIn, params.amountOutMinimum);
-        // also return a dummy amountOut for testing
-        return params.amountOutMinimum + 100;
+        amountOut = params.amountIn * 2;
+
+        emit ExactInputSingleCalled(
+            msg.sender,
+            params.tokenIn,
+            params.tokenOut,
+            params.amountIn,
+            params.amountOutMinimum,
+            amountOut
+        );
     }
 }
