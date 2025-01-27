@@ -2,15 +2,13 @@ import { ethers, upgrades } from "hardhat";
 
 async function main() {
   const [proxyAddress, contractName] = [
-    "0x608c0A0185a38BcDDF5C5699714aF904da22d5BF",
-    "VaultTraderUniswap",
+    process.env.PROXY_ADDRESS,
+    process.env.CONTRACT_NAME,
   ];
-  console.log("proxyAddress:", proxyAddress);
-  console.log("contractName:", contractName);
 
   if (!proxyAddress || !contractName) {
     console.error(
-      "Usage: npx hardhat run scripts/upgrade-contract.deploy.ts --network <network> <proxyAddress> <contractName>",
+      "Usage: npx hardhat run scripts/upgrade-contract.deploy.ts",
     );
     process.exit(1);
   }
